@@ -15,24 +15,17 @@ import org.jboss.logging.Logger;
 
 import com.shorturl.appserver.LookupManager;
 import com.shorturl.ejb.interfaces.ShortUrlBeanLocal;
+import com.shorturl.shortener.ThreadPool;
 
 /**
  * Servlet implementation class IncrementViewCountServlet
  */
-@WebServlet(description = "Servlet for incrementing the view count of short url", urlPatterns = { "/updvwct" })
-public class IncrementViewCountServlet extends HttpServlet {
-	private static final Logger LOG = Logger.getLogger(IncrementViewCountServlet.class);
+@WebServlet(description = "Servlet for incrementing the view count of short url", urlPatterns = { "/upclkct" })
+public class IncrementClickCountServlet extends HttpServlet {
+	private static final Logger LOG = Logger.getLogger(IncrementClickCountServlet.class);
 
 	private static final long serialVersionUID = 1L;
 	private static final String CLICK_COUNT = "clickCount";
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public IncrementViewCountServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -46,11 +39,11 @@ public class IncrementViewCountServlet extends HttpServlet {
 			String shortUrl = request.getParameter("u");
 
 			/*
-			 * 1. First check whether the "Referer" header is included 2. If so,
-			 * does it contain the shorturl 3. If both the above conditions are
-			 * satisfied, then fetch the session details 4. Check for whether
-			 * the client has already clicked the button in the current session.
-			 * If not, then increment the click count.
+			 * 1. First check whether the "Referer" header is included
+			 * 2. If so, does it contain the shorturl
+			 * 3. If both the above conditions are satisfied, then fetch the session details
+			 * 4. Check for whether the client has already clicked the button in the current session.
+			 *    If not, then increment the click count.
 			 */
 			if (referer != null && shortUrl != null && referer.contains(shortUrl)) {
 				HttpSession httpSession = request.getSession(false);
@@ -70,7 +63,7 @@ public class IncrementViewCountServlet extends HttpServlet {
 						}
 						if (!clickedUrlSet.contains(shortUrl)) {
 							clickedUrlSet.add(shortUrl);
-							incrementClickCount(shortUrl);
+							addIncrementThreadToPool(shortUrl);
 						}
 					}
 				}
@@ -89,17 +82,22 @@ public class IncrementViewCountServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-	private void incrementClickCount(String shortUrl) {
-		// TODO Must add the thread to the executor services
-		Thread incrementThread = new Thread(new IncrementThread(shortUrl));
-		incrementThread.start();
+	/**
+	 * Increment the click count by adding the increment thread to the thread pool.
+	 * @param shortUrl The shorturl for which the click count has to be increment
+	 */
+	private void addIncrementThreadToPool(String shortUrl) {
+		ThreadPool.addTask(new IncrementClickCountThread(shortUrl));
 	}
 
-	// TODO Must change this to appropriate class
-	private static class IncrementThread implements Runnable {
+	/**
+	 * Increment the View Count
+	 * @author Pradeep Kumar
+	 */
+	private static class IncrementClickCountThread implements Runnable {
 		private String shortUrl = null;
 
-		private IncrementThread(String shorturl) {
+		private IncrementClickCountThread(String shorturl) {
 			this.shortUrl = shorturl;
 		}
 

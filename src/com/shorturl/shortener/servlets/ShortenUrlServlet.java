@@ -2,7 +2,6 @@ package com.shorturl.shortener.servlets;
 
 import java.io.IOException;
 
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,11 +38,11 @@ public class ShortenUrlServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try {
 		long randomNumber = randomNumGenerator.getRandomNumber();
 		String shortenedUrl = Base62.encode(randomNumber);
 
 		response.setContentType("text/plain");
-		try {
 			ShortUrlDetails linkdetails = new ShortUrlDetails();
 			linkdetails.setShortUrl(shortenedUrl);
 			linkdetails.setLandingPageUrl(request.getParameter("lp_url"));
@@ -54,7 +53,7 @@ public class ShortenUrlServlet extends HttpServlet {
 			shortUrlBeanLocal.addOrUpdateShortUrlDetails(linkdetails);
 
 			response.getWriter().write("{\"status\":\"success\", \"short-url\":\"https://surfweb.io/s/" + shortenedUrl + "\"}");
-		} catch (NamingException exception) {
+		} catch (Exception exception) {
 			LOG.error(exception);
 			response.getWriter().write("{\"status\":\"failure\"}");
 		}

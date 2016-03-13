@@ -21,9 +21,7 @@ public class FreemarkerConfigManager {
 		ClassLoader classloader = FreemarkerConfigManager.class.getClassLoader();
 		config.setTemplateLoader(new ClassTemplateLoader(classloader, "META-INF/fmtemplates"));
 		config.setDefaultEncoding("UTF-8");
-		
-		// TODO - Must change this to TemplateExceptionHandler_RETHROW_HANDLER
-		config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+		config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 	}
 
 	/**

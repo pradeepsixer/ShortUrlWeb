@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jboss.logging.Logger;
@@ -24,6 +25,7 @@ import org.jboss.logging.Logger;
 import com.shorturl.appserver.LookupManager;
 import com.shorturl.datamodel.ShortUrlDetails;
 import com.shorturl.ejb.interfaces.ShortUrlBeanLocal;
+import com.shorturl.shortener.ThreadPool;
 import com.shorturl.template.FreemarkerConfigManager;
 import com.shorturl.template.TemplateConstants;
 
@@ -40,9 +42,6 @@ import freemarker.template.Template;
 public class UrlRecognitionFilter implements Filter {
 	private static final Logger LOG = Logger.getLogger(UrlRecognitionFilter.class);
 
-	// TODO - Delete this as this is only intended for testing purpose
-	private static final Set<String> sessionIdsSet = new HashSet<>();
-
 	private static final String VIEW_COUNT = "viewCount";
 
 	/*
@@ -52,8 +51,6 @@ public class UrlRecognitionFilter implements Filter {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/*
@@ -118,20 +115,17 @@ public class UrlRecognitionFilter implements Filter {
 					synchronized (sessionId) {
 						if (!viewedUrlSet.contains(shortUrl)) {
 							viewedUrlSet.add(shortUrl);
-							incrementViewCount(shortUrl);
-							LOG.info("Incrementing the count as this url is being visited for the first time in this session");
-						} else {
-							// TODO Must remove this block, as this is only intended for testing purpose
-							LOG.info("Not incrementing since the url has already been visited during this session");
+							addIncrementThreadToPool(shortUrl);
 						}
 					}
 					return;
 				}
-			} else {
-				LOG.info("Not a HTTP Request");
 			}
 		} catch (Exception e) {
 			LOG.info("Error in processing the request", e);
+			if (response instanceof HttpServletResponse) {
+				((HttpServletResponse) response).sendError(500);
+			}
 		}
 		filterChain.doFilter(request, response);
 	}
@@ -147,17 +141,18 @@ public class UrlRecognitionFilter implements Filter {
 		// necessary to process
 	}
 
-	private void incrementViewCount(String shortUrl) {
-		// TODO Must add the thread to the executor service
-		Thread incrementThread = new Thread(new IncrementThread(shortUrl));
-		incrementThread.start();
+	/**
+	 * Add the {@link IncrementViewCountThread} to the Thread Pool
+	 * @param shortUrl The shortUrl for which the view count has to be incremented
+	 */
+	private void addIncrementThreadToPool(String shortUrl) {
+		ThreadPool.addTask(new IncrementViewCountThread(shortUrl));
 	}
 
-	// TODO Must change this to appropriate class
-	private static class IncrementThread implements Runnable {
+	private static class IncrementViewCountThread implements Runnable {
 		private String shortUrl = null;
 
-		private IncrementThread(String shorturl) {
+		private IncrementViewCountThread(String shorturl) {
 			this.shortUrl = shorturl;
 		}
 
