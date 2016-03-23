@@ -99,23 +99,27 @@ public class UrlRecognitionFilter implements Filter {
 					ShortUrlDetails shortUrlDetails = shortUrlBean
 							.getShortUrlDetails(requestURI.substring(3, requestURI.length()));
 
-					Template template = FreemarkerConfigManager.getConfiguration()
-							.getTemplate(TemplateConstants.BANNER_TEMPLATE);
-					Map<String, String> paramMap = new HashMap<>();
-					paramMap.put("shareUrl", shortUrlDetails.getShareUrl());
-					paramMap.put("landingPageUrl", shortUrlDetails.getLandingPageUrl());
-					paramMap.put("bannerTitle", shortUrlDetails.getBannerTitle());
-					paramMap.put("bannerDescription", shortUrlDetails.getBannerDescription());
-					paramMap.put("shortUrl", shortUrl);
-
-					response.setContentType("text/html");
-					template.process(paramMap, response.getWriter());
-
-					synchronized (sessionId) {
-						if (!viewedUrlSet.contains(shortUrl)) {
-							viewedUrlSet.add(shortUrl);
-							addIncrementThreadToPool(shortUrl);
+					if (shortUrlDetails != null) {
+						Template template = FreemarkerConfigManager.getConfiguration()
+								.getTemplate(TemplateConstants.BANNER_TEMPLATE);
+						Map<String, String> paramMap = new HashMap<>();
+						paramMap.put("shareUrl", shortUrlDetails.getShareUrl());
+						paramMap.put("landingPageUrl", shortUrlDetails.getLandingPageUrl());
+						paramMap.put("bannerTitle", shortUrlDetails.getBannerTitle());
+						paramMap.put("bannerDescription", shortUrlDetails.getBannerDescription());
+						paramMap.put("shortUrl", shortUrl);
+	
+						response.setContentType("text/html");
+						template.process(paramMap, response.getWriter());
+	
+						synchronized (sessionId) {
+							if (!viewedUrlSet.contains(shortUrl)) {
+								viewedUrlSet.add(shortUrl);
+								addIncrementThreadToPool(shortUrl);
+							}
 						}
+					} else {
+						((HttpServletResponse) response).sendError(404);
 					}
 					return;
 				}

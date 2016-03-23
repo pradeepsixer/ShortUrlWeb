@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jboss.logging.Logger;
 
 import com.shorturl.appserver.LookupManager;
+import com.shorturl.common.DomainUtil;
 import com.shorturl.common.numbers.Base62;
 import com.shorturl.common.numbers.RangedRandomGenerator;
 import com.shorturl.datamodel.ShortUrlDetails;
@@ -52,7 +53,7 @@ public class ShortenUrlServlet extends HttpServlet {
 			ShortUrlBeanLocal shortUrlBeanLocal = (ShortUrlBeanLocal) LookupManager.lookup(ShortUrlBeanLocal.JNDI_NAME);
 			shortUrlBeanLocal.addOrUpdateShortUrlDetails(linkdetails);
 
-			response.getWriter().write("{\"status\":\"success\", \"short-url\":\"https://surfweb.io/s/" + shortenedUrl + "\"}");
+			response.getWriter().write("{\"status\":\"success\", \"short-url\":\"" + DomainUtil.calcDomainUrl(request) + "s/" + shortenedUrl + "\"}");
 		} catch (Exception exception) {
 			LOG.error(exception);
 			response.getWriter().write("{\"status\":\"failure\"}");

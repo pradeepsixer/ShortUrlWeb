@@ -30,10 +30,53 @@
     </head>
 
     <body>
-		
-		<!-- Top content -->
+
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Short URL</a>
+				</div>
+	
+				<div class="collapse navbar-collapse"
+					id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+						<li><a href="#">Link</a></li>
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-expanded="false">Dropdown
+								<span class="caret"></span>
+						</a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="#">Something else here</a></li>
+								<li class="divider"></li>
+								<li><a href="#">Separated link</a></li>
+								<li class="divider"></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul></li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+						<button type="submit" class="btn btn-default">Submit</button>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#">Link</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+	<!-- Top content -->
         <div class="top-content">
-        	
             <div class="inner-bg">
                 <div class="container">
                     <div class="row">
@@ -56,7 +99,8 @@
                         		<p>Fill in the form below to create your action banner:</p>
                             </div>
                             <div class="form-bottom contact-form">
-			                    <form role="form" method="post" action="/shortenurl">
+								<div class="alert-message"></div>
+			                    <form id="banner-form" role="form" method="post">
 			                    	<div class="form-group">
 			                    		<label class="sr-only" for="share-url">URL to be shared</label>
 			                        	<input type="text" name="share_url" placeholder="URL to be shared" class="share-url form-control" id="share-url" data-toggle="popover" data-trigger="focus" data-placement="left" data-content="Paste the URL you want to share.">
@@ -85,6 +129,7 @@
 
         <!-- Javascript -->
         <script src="assets/js/jquery-1.11.1.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
         <script src="assets/bootstrap/js/bootstrap.min.js"></script>
         <script src="assets/js/jquery.backstretch.min.js"></script>
         <script src="assets/js/scripts.js"></script>
