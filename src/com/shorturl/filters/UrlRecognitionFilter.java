@@ -101,14 +101,17 @@ public class UrlRecognitionFilter implements Filter {
 
 					if (shortUrlDetails != null) {
 						Template template = FreemarkerConfigManager.getConfiguration()
-								.getTemplate(TemplateConstants.BANNER_TEMPLATE);
+								.getTemplate(TemplateConstants.SHORTURL_LANDING_TEMPLATE);
 						Map<String, String> paramMap = new HashMap<>();
-						paramMap.put("shareUrl", shortUrlDetails.getShareUrl());
+
+						/*
+						 *  TODO - Must check the type of the action before parsing further
+						 *  For e.g. if the type of the action is banner, then parse the banner related information
+						 */
 						paramMap.put("landingPageUrl", shortUrlDetails.getLandingPageUrl());
-						paramMap.put("bannerTitle", shortUrlDetails.getBannerTitle());
-						paramMap.put("bannerDescription", shortUrlDetails.getBannerDescription());
+						paramMap.put("actionJson", shortUrlDetails.getActionJson());
 						paramMap.put("shortUrl", shortUrl);
-	
+
 						response.setContentType("text/html");
 						template.process(paramMap, response.getWriter());
 	
@@ -125,7 +128,7 @@ public class UrlRecognitionFilter implements Filter {
 				}
 			}
 		} catch (Exception e) {
-			LOG.info("Error in processing the request", e);
+			LOG.error("Error in processing the request", e);
 			if (response instanceof HttpServletResponse) {
 				((HttpServletResponse) response).sendError(500);
 			}
@@ -140,7 +143,7 @@ public class UrlRecognitionFilter implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Create a FilterConfig member, if in case FilterConfig becomes
+		// TODO Create a FilterConfig member variable, if in case FilterConfig becomes
 		// necessary to process
 	}
 
