@@ -20,6 +20,7 @@ import org.jboss.logging.Logger;
 
 import com.shorturl.appserver.LookupManager;
 import com.shorturl.common.HttpConstants.HttpHeaders;
+import com.shorturl.common.HttpConstants.StatusCodes;
 import com.shorturl.security.DigestUtil;
 import com.shorturl.template.FreemarkerConfigManager;
 import com.shorturl.template.TemplateConstants;
@@ -82,7 +83,7 @@ public class LoginServlet extends HttpServlet {
 						boolean loginfailed = false;
 						if (result.next()) {
 							String lookupPwd = result.getString(1);
-	
+
 							MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 							String base64EncPwd = DigestUtil.base64EncodedHash(messageDigest, password);
 							if (base64EncPwd.equals(lookupPwd)) {
@@ -124,7 +125,7 @@ public class LoginServlet extends HttpServlet {
 			}
 		} catch (Exception e) {
 			LOG.error("Error in processing the request", e);
-			response.sendError(500);
+			response.sendError(StatusCodes.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

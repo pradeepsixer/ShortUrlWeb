@@ -10,7 +10,7 @@
 
         <!-- CSS -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
-        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 		<link rel="stylesheet" href="assets/css/form-elements.css">
         <link rel="stylesheet" href="assets/css/style.css">
 
@@ -53,13 +53,8 @@
 								<span class="caret"></span>
 						</a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else here</a></li>
-								<li class="divider"></li>
-								<li><a href="#">Separated link</a></li>
-								<li class="divider"></li>
-								<li><a href="#">One more separated link</a></li>
+								<li><a href="/signup">Signup</a></li>
+								<li><a href="/login">Login</a></li>
 							</ul></li>
 					</ul>
 					<form class="navbar-form navbar-left" role="search">
@@ -101,21 +96,21 @@
                             <div class="form-bottom contact-form">
 								<div class="alert-message"></div>
 			                    <form id="banner-form" role="form" method="post">
-			                    	<div class="form-group">
-			                    		<label class="sr-only" for="share-url">URL to be shared</label>
-			                        	<input type="text" name="share_url" placeholder="URL to be shared" class="share-url form-control" id="share-url" data-toggle="popover" data-trigger="focus" data-placement="left" data-content="Paste the URL you want to share.">
+			                        <div class="form-group">
+			                        	<label class="sr-only" for="lp_url">Landing page URL</label>
+			                        	<input type="text" name="lp_url" placeholder="Landing page URL" class="landing-url form-control" id="landing-url" data-toggle="popover" data-trigger="focus" data-placement="left" data-content="Paste the Landing page URL">
 			                        </div>
 			                        <div class="form-group">
-			                        	<label class="sr-only" for="cta-message">Call-to-Action Message</label>
+			                        	<label class="sr-only" for="cta_msg">Call-to-Action Message</label>
 			                        	<input type="text" name="cta_msg" placeholder="Call-to-Action Message" class="cta-message form-control" id="cta-message" data-toggle="popover" data-trigger="focus" data-placement="left" data-content="Type your eye-catching message">
 			                        </div>
 									<div class="form-group">
-			                    		<label class="sr-only" for="cta-button">Call-to-Action Button Text</label>
+			                    		<label class="sr-only" for="cta_title">Call-to-Action Button Text</label>
 			                        	<input type="text" name="cta_title" placeholder="Call-to-Action Button Text" class="cta-button form-control" id="cta-button" data-toggle="popover" data-trigger="focus" data-placement="left" data-content="Action Text ">
 			                        </div>
-			                        <div class="form-group">
-			                        	<label class="sr-only" for="landing-url">Landing page URL</label>
-			                        	<input type="text" name="lp_url" placeholder="Landing page URL" class="landing-url form-control" id="landing-url" data-toggle="popover" data-trigger="focus" data-placement="left" data-content="Paste the Landing page URL">
+			                    	<div class="form-group">
+			                    		<label class="sr-only" for="target_url">URL to be shared</label>
+			                        	<input type="text" name="target_url" placeholder="URL to be shared" class="share-url form-control" id="share-url" data-toggle="popover" data-trigger="focus" data-placement="left" data-content="Paste the URL you want to share.">
 			                        </div>
 			                        <button type="submit" class="btn  btn-lg">Create</button>
 			                    </form>
@@ -130,7 +125,7 @@
         <!-- Javascript -->
         <script src="assets/js/jquery-1.11.1.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
         <script src="assets/js/jquery.backstretch.min.js"></script>
         <script src="assets/js/scripts.js"></script>
         
